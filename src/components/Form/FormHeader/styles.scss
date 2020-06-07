@@ -1,0 +1,17 @@
+$input-text-color: #7c8a96;
+
+.header {
+  margin-bottom: 35px;
+  h2 {
+    margin-bottom: 0;
+    span {
+      color: black;
+      text-transform: capitalize;
+      color: $input-text-color;
+    }
+  }
+
+  p {
+    margin-top: 5px;
+  }
+}

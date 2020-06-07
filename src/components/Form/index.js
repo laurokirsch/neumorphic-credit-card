@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { validateInput } from '../../utils';
+import FormHeader from './FormHeader';
 
 const Form = ({
   cardMonth,
@@ -40,6 +41,8 @@ const Form = ({
   return (
     <div className='card-form'>
       <div className='card-form__inner'>
+        <FormHeader cardHolder={state.cardHolder} />
+        {children}
         <div className='card-input'>
           <label htmlFor='cardNumber' className='card-input__label'>
             Número do cartão

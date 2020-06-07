@@ -6,24 +6,13 @@ import {
 } from 'react-transition-group';
 import './styles.scss';
 
-import { cardTypes, cardBackground, chip } from '../../assets/';
+import {
+  randomCreditCardBackgroundImage,
+  creditCardsRegexMap,
+} from '../../utils';
+import { creditCardFlagTypes, creditCardBackground, chip } from '../../assets/';
 
-const CARDS = {
-  visa: '^4',
-  amex: '^(34|37)',
-  mastercard: '^5[1-5]',
-  discover: '^6011',
-  unionpay: '^62',
-  troy: '^9792',
-  diners: '^(30[0-5]|36)',
-};
-
-const cardBackgroundName = () => {
-  let random = Math.floor(Math.random() * 25 + 1);
-  return `${random}.jpeg`;
-};
-
-const BACKGROUND_IMG = cardBackgroundName();
+const BACKGROUND_IMG = randomCreditCardBackgroundImage();
 
 const Card = ({
   cardHolder,
@@ -42,21 +31,20 @@ const Card = ({
 }) => {
   const [style, setStyle] = useState(null);
 
-  const cardType = (cardNumber) => {
-    const number = cardNumber;
-    let re;
-    for (const [card, pattern] of Object.entries(CARDS)) {
-      re = new RegExp(pattern);
-      if (number.match(re) != null) {
-        return card;
+  const getCreditCardFlagByRegex = (creditCardNumber) => {
+    for (const [creditCardFlag, flagRegex] of Object.entries(
+      creditCardsRegexMap
+    )) {
+      if (flagRegex.test(creditCardNumber)) {
+        return creditCardFlag;
       }
     }
-
-    return 'mastercard'; // default type
+    // default
+    return 'mastercard';
   };
 
-  const useCardType = useMemo(() => {
-    return cardType(cardNumber);
+  const creditCardFlag = useMemo(() => {
+    return getCreditCardFlagByRegex(cardNumber);
   }, [cardNumber]);
 
   const outlineElementStyle = (element) => {
@@ -78,19 +66,22 @@ const Card = ({
 
   const maskCardNumber = (cardNumber) => {
     let cardNumberArr = cardNumber.split('');
+    let mutableCardNumberArr = cardNumberArr;
     cardNumberArr.forEach((val, index) => {
-      if (index > 4 && index < 14) {
-        if (cardNumberArr[index] !== ' ') {
-          cardNumberArr[index] = '*';
-        }
+      if (index === 4 || index === 8 || index === 12) {
+        mutableCardNumberArr = [
+          ...cardNumberArr.slice(0, index),
+          '_',
+          ...cardNumberArr.slice(index + 1),
+        ];
+        // mutableCardNumberArr.push('X');
       }
     });
-
-    return cardNumberArr;
+    return mutableCardNumberArr;
   };
 
   return (
-    <div className='card-list'>
+    <div className='credit-card-wrapper'>
       <div className={'card-item ' + (isCardFlipped ? '-active' : '')}>
         <div className='card-item__side -front'>
           <div
@@ -98,11 +89,11 @@ const Card = ({
             style={style}
           />
           <div className='card-item__cover'>
-            {/* <img
-                        alt=''
-                        src={`../../assets/card-background/${BACKGROUND_IMG}`}
-                        className='card-item__bg'
-                    /> */}
+            <img
+              alt=''
+              src={creditCardBackground[BACKGROUND_IMG]}
+              className='card-item__bg'
+            />
           </div>
 
           <div className='card-item__wrapper'>
@@ -110,8 +101,8 @@ const Card = ({
               <img src={chip} alt='' className='card-item__chip' />
               <div className='card-item__type'>
                 <img
-                  alt={useCardType}
-                  src={cardTypes[useCardType]}
+                  alt={creditCardFlag}
+                  src={creditCardFlagTypes[creditCardFlag]}
                   className='card-item__typeImg'
                 />
               </div>
@@ -210,8 +201,7 @@ const Card = ({
         <div className='card-item__side -back'>
           <div className='card-item__cover'>
             <img
-              alt=''
-              src={`../../assets/card-background/${BACKGROUND_IMG}`}
+              src={creditCardBackground[BACKGROUND_IMG]}
               className='card-item__bg'
             />
           </div>
@@ -234,7 +224,7 @@ const Card = ({
             <div className='card-item__type'>
               <img
                 alt='card-type'
-                src={'../../assets/card-type/mastercard.png'}
+                src={creditCardFlagTypes[creditCardFlag]}
                 className='card-item__typeImg'
               />
             </div>

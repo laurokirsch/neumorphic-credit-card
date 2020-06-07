@@ -6,7 +6,7 @@ import './App.scss';
 
 const initialState = {
   cardNumber: '',
-  cardHolder: '',
+  cardHolder: 'Lauro Kirsch',
   cardMonth: '',
   cardYear: '',
   cardCvv: '',
@@ -57,21 +57,6 @@ const App = () => {
 
   return (
     <div className='wrapper'>
-      <Card
-        cardNumber={state.cardNumber}
-        cardHolder={state.cardHolder}
-        cardMonth={state.cardMonth}
-        cardYear={state.cardYear}
-        cardCvv={state.cardCvv}
-        isCardFlipped={state.isCardFlipped}
-        currentFocusedElm={currentFocusedElm}
-        onCardElementClick={focusFormFieldByKey}
-        cardNumberRef={cardElementsRef.cardNumber}
-        cardHolderRef={cardElementsRef.cardHolder}
-        cardDateRef={cardElementsRef.cardDate}
-        cardNumberState={state.cardNumber}
-        cardHolderState={state.cardHolder}
-      />
       <Form
         state={state}
         onUpdateState={updateStateValues}
@@ -82,7 +67,23 @@ const App = () => {
         onCardInputBlur={onCardInputBlur}
         cardNumberState={state.cardNumber}
         cardNameState={state.cardNameState}
-      />
+      >
+        <Card
+          cardNumber={state.cardNumber}
+          cardHolder={state.cardHolder}
+          cardMonth={state.cardMonth}
+          cardYear={state.cardYear}
+          cardCvv={state.cardCvv}
+          isCardFlipped={state.isCardFlipped}
+          currentFocusedElm={currentFocusedElm}
+          onCardElementClick={focusFormFieldByKey}
+          cardNumberRef={cardElementsRef.cardNumber}
+          cardHolderRef={cardElementsRef.cardHolder}
+          cardDateRef={cardElementsRef.cardDate}
+          cardNumberState={state.cardNumber}
+          cardHolderState={state.cardHolder}
+        />
+      </Form>
     </div>
   );
 };
