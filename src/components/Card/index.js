@@ -81,7 +81,7 @@ const Card = ({
   };
 
   return (
-    <div className='credit-card-wrapper'>
+    <div className='card-item-wrapper'>
       <div className={'card-item ' + (isCardFlipped ? '-active' : '')}>
         <div className='card-item__side -front'>
           <div

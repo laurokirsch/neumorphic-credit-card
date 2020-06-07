@@ -6,7 +6,7 @@ import './App.scss';
 
 const initialState = {
   cardNumber: '',
-  cardHolder: 'Lauro Kirsch',
+  cardHolder: '',
   cardMonth: '',
   cardYear: '',
   cardCvv: '',
