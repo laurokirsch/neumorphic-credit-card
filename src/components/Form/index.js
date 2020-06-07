@@ -1,41 +1,34 @@
-import React, { useState } from 'react';
-import { validateInput } from '../../utils';
-import FormHeader from './FormHeader';
+import React from 'react';
+import FormHeader from '../FormHeader';
+import './styles.scss';
+
+import { validateInput } from './utils';
 
 const Form = ({
-  cardMonth,
-  cardYear,
-  onUpdateState,
-  onCardInputFocus,
-  onCardInputBlur,
-  cardCvv,
+  cardDate,
+  updateState,
+  handleInputFocus,
+  handleInputBlur,
   children,
   state,
+  formFieldsRefs,
 }) => {
-  const [cardNumber, setCardNumber] = useState('');
-
-  const handleFormChange = (event) => {
+  const handleInputChange = (event) => {
     const { name, value } = event.target;
-
-    if (!validateInput(name, value)) return;
-
-    onUpdateState(name, value);
+    let inputVal = value;
+    if (!validateInput(name, value)) {
+      // removes last character
+      inputVal = inputVal.substr(0, inputVal.length - 2);
+    }
+    updateState(name, inputVal);
   };
 
-  const onCardNumberChange = (event) => {
-    let { value: cardNumber, name } = event.target;
-    const regexNumbers = /^[0-9]{0,16}$/;
-    if (!regexNumbers.test(cardNumber)) return;
-    setCardNumber(cardNumber);
-    onUpdateState(name, cardNumber);
+  const handleCvvFocus = () => {
+    updateState('isCardFlipped', true);
   };
 
-  const onCvvFocus = (event) => {
-    onUpdateState('isCardFlipped', true);
-  };
-
-  const onCvvBlur = (event) => {
-    onUpdateState('isCardFlipped', false);
+  const handleCvvBlur = () => {
+    updateState('isCardFlipped', false);
   };
 
   return (
@@ -48,13 +41,14 @@ const Form = ({
             Número do cartão
           </label>
           <input
-            name='cardNumber'
             className='card-input__input'
             autoComplete='off'
-            onChange={onCardNumberChange}
             maxLength='19'
-            onFocus={(e) => onCardInputFocus(e, 'cardNumber')}
-            onBlur={onCardInputBlur}
+            name='cardNumber'
+            onChange={handleInputChange}
+            onFocus={handleInputFocus}
+            onBlur={handleInputBlur}
+            ref={formFieldsRefs.cardNumber}
             value={state.cardNumber}
           />
         </div>
@@ -67,10 +61,11 @@ const Form = ({
             className='card-input__input'
             autoComplete='off'
             name='cardHolder'
-            onChange={handleFormChange}
+            onChange={handleInputChange}
+            onFocus={handleInputFocus}
+            onBlur={handleInputBlur}
+            ref={formFieldsRefs.cardHolder}
             value={state.cardHolder}
-            onFocus={(e) => onCardInputFocus(e, 'cardHolder')}
-            onBlur={onCardInputBlur}
           />
         </div>
 
@@ -85,12 +80,13 @@ const Form = ({
                 maxLength='2'
                 autoComplete='off'
                 name='cardMonth'
-                onChange={handleFormChange}
-                onFocus={(e) => onCardInputFocus(e, 'cardDate')}
-                onBlur={onCardInputBlur}
-                ref={cardCvv}
+                onChange={handleInputChange}
+                onFocus={handleInputFocus}
+                onBlur={handleInputBlur}
                 required
                 placeholder='Ex: 07'
+                ref={formFieldsRefs.cardDate}
+                value={state.cardMonth}
               />
             </div>
           </div>
@@ -104,11 +100,13 @@ const Form = ({
                 maxLength='2'
                 autoComplete='off'
                 name='cardYear'
-                onChange={handleFormChange}
-                onFocus={(e) => onCardInputFocus(e, 'cardDate')}
-                onBlur={onCardInputBlur}
-                ref={cardCvv}
                 placeholder='Ex: 21'
+                ref={cardDate}
+                onChange={handleInputChange}
+                onFocus={handleInputFocus}
+                onBlur={handleInputBlur}
+                ref={formFieldsRefs.cardDate}
+                value={state.cardYear}
               />
             </div>
           </div>
@@ -120,13 +118,14 @@ const Form = ({
               </label>
               <input
                 className='card-input__input'
-                maxLength='4'
+                maxLength='3'
                 autoComplete='off'
                 name='cardCvv'
-                onChange={handleFormChange}
-                onFocus={onCvvFocus}
-                onBlur={onCvvBlur}
-                ref={cardCvv}
+                onChange={handleInputChange}
+                onFocus={handleCvvFocus}
+                onBlur={handleCvvBlur}
+                ref={formFieldsRefs.cardCvv}
+                value={state.cardCvv}
               />
             </div>
           </div>

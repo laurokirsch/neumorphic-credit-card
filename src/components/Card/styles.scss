@@ -1,4 +1,4 @@
-$main-color: #8a05be;
+$card-color: #8a05be;
 
 .card-item-wrapper {
   margin-bottom: 35px;
@@ -97,7 +97,7 @@ $main-color: #8a05be;
 
         .card-item__cover {
           transform: rotateY(-180deg);
-          background: $main-color;
+          background: $card-color;
         }
       }
     }
@@ -111,7 +111,7 @@ $main-color: #8a05be;
     }
     &__cover {
       height: 100%;
-      background-color: $main-color;
+      background-color: $card-color;
       position: absolute;
       height: 100%;
       left: 0;
@@ -243,7 +243,7 @@ $main-color: #8a05be;
       font-size: 27px;
       margin-bottom: 35px;
       display: inline-block;
-      padding: 10px 15px;
+      padding: 10px 15px 10px 0px;
       cursor: pointer;
 
       @media screen and (max-width: 480px) {

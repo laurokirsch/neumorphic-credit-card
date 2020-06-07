@@ -2,14 +2,14 @@ import React, { useState, useRef, useCallback } from 'react';
 import Form from './components/Form';
 import Card from './components/Card';
 
-import './App.scss';
+import './assets/styles/global.scss';
 
 const initialState = {
-  cardNumber: '',
-  cardHolder: '',
-  cardMonth: '',
-  cardYear: '',
-  cardCvv: '',
+  cardNumber: '4984222289016789',
+  cardHolder: 'Lauro Kirsch',
+  cardMonth: '07',
+  cardYear: '23',
+  cardCvv: '123',
   isCardFlipped: false,
 };
 
@@ -17,18 +17,17 @@ const App = () => {
   const [state, setState] = useState(initialState);
   const [currentFocusedElm, setCurrentFocusedElm] = useState(null);
 
-  const updateStateValues = useCallback(
-    (keyName, value) => {
+  const updateState = useCallback(
+    (name, value) => {
       setState({
         ...state,
-        [keyName]: value || initialState[keyName],
+        [name]: value,
       });
     },
     [state]
   );
 
-  // References for the Form Inputs used to focus corresponding inputs.
-  let formFieldsRefObj = {
+  const formFieldsRefs = {
     cardNumber: useRef(),
     cardHolder: useRef(),
     cardDate: useRef(),
@@ -36,52 +35,40 @@ const App = () => {
   };
 
   let focusFormFieldByKey = useCallback((key) => {
-    formFieldsRefObj[key].current.focus();
+    formFieldsRefs[key].current.focus();
   });
 
-  // These are the references for the Card DIV elements.
   let cardElementsRef = {
     cardNumber: useRef(),
     cardHolder: useRef(),
     cardDate: useRef(),
   };
 
-  let onCardFormInputFocus = (_event, inputName) => {
-    const refByName = cardElementsRef[inputName];
-    setCurrentFocusedElm(refByName);
+  const handleInputFocus = (event) => {
+    let focusedInputName = event.target.name;
+    if (focusedInputName === 'cardMonth' || focusedInputName === 'cardYear') {
+      focusedInputName = 'cardDate';
+    }
+    setCurrentFocusedElm(cardElementsRef[focusedInputName]);
   };
 
-  let onCardInputBlur = useCallback(() => {
-    setCurrentFocusedElm(null);
-  }, []);
+  const handleInputBlur = () => setCurrentFocusedElm(null);
 
   return (
     <div className='wrapper'>
       <Form
         state={state}
-        onUpdateState={updateStateValues}
-        cardNumberRef={formFieldsRefObj.cardNumber}
-        cardHolderRef={formFieldsRefObj.cardHolder}
-        cardDateRef={formFieldsRefObj.cardDate}
-        onCardInputFocus={onCardFormInputFocus}
-        onCardInputBlur={onCardInputBlur}
-        cardNumberState={state.cardNumber}
-        cardNameState={state.cardNameState}
+        updateState={updateState}
+        formFieldsRefs={formFieldsRefs}
+        handleInputFocus={handleInputFocus}
+        handleInputBlur={handleInputBlur}
       >
         <Card
-          cardNumber={state.cardNumber}
-          cardHolder={state.cardHolder}
-          cardMonth={state.cardMonth}
-          cardYear={state.cardYear}
-          cardCvv={state.cardCvv}
+          state={state}
           isCardFlipped={state.isCardFlipped}
           currentFocusedElm={currentFocusedElm}
           onCardElementClick={focusFormFieldByKey}
-          cardNumberRef={cardElementsRef.cardNumber}
-          cardHolderRef={cardElementsRef.cardHolder}
-          cardDateRef={cardElementsRef.cardDate}
-          cardNumberState={state.cardNumber}
-          cardHolderState={state.cardHolder}
+          cardElementsRef={cardElementsRef}
         />
       </Form>
     </div>
