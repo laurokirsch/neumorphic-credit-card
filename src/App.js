@@ -5,7 +5,7 @@ import Card from './components/Card';
 import './assets/styles/global.scss';
 
 const initialState = {
-  cardNumber: '4984222289016789',
+  cardNumber: '5451222289016789',
   cardHolder: 'Lauro Kirsch',
   cardMonth: '07',
   cardYear: '23',
@@ -34,11 +34,11 @@ const App = () => {
     cardCvv: useRef(),
   };
 
-  let focusFormFieldByKey = useCallback((key) => {
+  const focusFormFieldByKey = useCallback((key) => {
     formFieldsRefs[key].current.focus();
   });
 
-  let cardElementsRef = {
+  const cardElementsRef = {
     cardNumber: useRef(),
     cardHolder: useRef(),
     cardDate: useRef(),
