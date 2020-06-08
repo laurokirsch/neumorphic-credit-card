@@ -15,4 +15,4 @@ Credit card form inspired by the `Neumorphic Design` trend
 
 ### Demo
 
-![Demo](https://raw.githubusercontent.com/laurokirsch/neumorphic-credit-card/master/public/demo.gif)
+![Demo](./public/demo.gif)
